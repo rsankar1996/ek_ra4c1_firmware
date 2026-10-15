@@ -6,7 +6,8 @@ MEMORY
         RAM (rwx) : ORIGIN = 0x20000000, LENGTH = 0x18000
 }
 
-_estack = ORIGIN(RAM) + LENGTH (RAM);
+_min_heap_size  = 0x1000; /* 4KB */
+_min_stack_size = 0x800;  /* 2KB */
 
 SECTIONS
 {
@@ -39,4 +40,22 @@ SECTIONS
                 . = ALIGN(4);
                 _ebss = .;
         } > RAM
+
+	.heap (NOLOAD) : ALIGN(8)
+	{
+		. = ALIGN(8);
+		PROVIDE(end = .);
+		PROVIDE(_end = .);
+		_sheap = .;
+		. = . + _min_heap_size;
+		. = ALIGN(8);
+		_eheap = .;
+	} > RAM
+
+	.stack (ORIGIN(RAM) + LENGTH(RAM) - _min_stack_size) (NOLOAD) : ALIGN(8)
+	{
+		_sstack = .;
+		. = . + _min_stack_size;
+		_estack = .;
+	} > RAM
 }

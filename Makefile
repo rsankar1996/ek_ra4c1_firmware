@@ -1,7 +1,8 @@
-CC      = arm-none-eabi-gcc
-OBJCOPY = arm-none-eabi-objcopy
-CFLAGS  = -mcpu=cortex-m33 -mthumb -O1 -g -Wall -ffreestanding
-TARGET = ek_ra4c1_fw
+CC	= arm-none-eabi-gcc
+OBJCOPY	= arm-none-eabi-objcopy
+INC_DIR = inc
+CFLAGS  = -mcpu=cortex-m33 -mthumb -O0 -g -Wall -ffreestanding -I$(INC_DIR)
+TARGET 	= ek_ra4c1_fw
 LDFLAGS = -nostdlib -T linker.ld -Wl,-Map=$(TARGET).map -Wl,--gc-sections
 
 
@@ -9,8 +10,9 @@ all: $(TARGET).elf $(TARGET).bin
 	mkdir -p build
 	mv $(TARGET).* build/
 
-CSOURCES = startup.c \
-	   main.c
+CSOURCES = src/startup.c \
+	   src/main.c	\
+	   src/init.c
 
 LINKER = linker.ld
 
