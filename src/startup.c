@@ -54,7 +54,8 @@ void Reset_Handler(void)
 
 void IRQ15_Handler(void)
 {
-        ICU_EVLINK(0) &= ~(1U << 16);
+        ICU_EVLINK(0) &= ~ICU_IELSR_IR;
+        (void)ICU_EVLINK(0);
         NVIC_ICPR = 0x1U;
 
         g_irq15_stat++;

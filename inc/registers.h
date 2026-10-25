@@ -86,11 +86,13 @@
 #define CPU_HZ     		80000000UL
 
 #define IOPORT_BASE	        0x4001F000UL
-#define IOPORT_PODR(n)      REG16((IOPORT_BASE + (0x0020 * n)) + 0x000)
-#define IOPORT_PDR(n)       REG16((IOPORT_BASE + (0x0020 * n)) + 0x002)
+#define IOPORT_PODR(n)      REG16((IOPORT_BASE + (0x0020 * (n))) + 0x000)
+#define IOPORT_PDR(n)       REG16((IOPORT_BASE + (0x0020 * (n))) + 0x002)
 
 #define PORT_PFSEL_BASE     0x4001F800UL
-#define PMN_PFS(m, n)       REG16(PORT_PFSEL_BASE + 0x000U + (0x040 * m) + (0x004 * n))
+#define PMN_PFS(m, n)       REG16(PORT_PFSEL_BASE + 0x000U + (0x040 * (m)) + (0x004 * (n)))
+#define PFS_PCR             (1U << 4)
+#define PFS_ISEL            (1U << 14)
 
 #define NVIC_ISER           REG32(0xE000E100UL)
 #define NVIC_ICER           REG32(0xE000E180UL)
@@ -110,7 +112,8 @@
 #define IRQ_EDGE_LOW_LEV    (3U)
 
 /* ICU Event Link register - n : 0-63 */
-#define ICU_EVLINK(n)       REG32(ICU_BASE + 0x300 + (0x4 * n))
+#define ICU_EVLINK(n)       REG32(ICU_BASE + 0x300 + (0x4 * (n)))
+#define ICU_IELSR_IR        (1U << 16)
 
 #define ICU_IELS_OFF        (0U)
 #define ICU_IELS_MSK        (0x1FFU)

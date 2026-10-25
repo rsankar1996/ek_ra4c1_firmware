@@ -23,7 +23,7 @@ int main(void)
 	IOPORT_SET_OUT(IO_PORT_06, IO_PIN_10);
 
 	PFS_WRITE_ENABLE();
-	PMN_PFS(5U, 13U) |= (1U << 14);
+	PMN_PFS(5U, 13U) |= (PFS_ISEL | PFS_PCR);
 	PFS_WRITE_DISABLE();
 
 	nvic_init();

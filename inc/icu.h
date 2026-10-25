@@ -1,6 +1,8 @@
 #ifndef ICU_H
 #define ICU_H
 
+#include <stdint.h>
+
 typedef enum
 {
     IRQ0,
