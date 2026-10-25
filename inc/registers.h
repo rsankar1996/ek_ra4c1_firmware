@@ -1,4 +1,5 @@
 #ifndef REGISTERS_H
+#define REGISTERS_H
 
 #include <stdint.h>
 
@@ -112,7 +113,7 @@
 #define ICU_EVLINK(n)       REG32(ICU_BASE + 0x300 + (0x4 * n))
 
 #define ICU_IELS_OFF        (0U)
-#define ICU_IELS_MSK        (0xFFU)
+#define ICU_IELS_MSK        (0x1FFU)
 
 /* PMISC: Miscellaneous Port Control. Verify base against the RA4C1 manual */
 #define PWPR                REG8(0x4001F800UL + 0x503U)

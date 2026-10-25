@@ -2,6 +2,7 @@
 #include "init.h"
 #include "main.h"
 #include "nvic.h"
+#include "ioport.h"
 
 extern uint32_t _estack, _sidata, _sdata, _edata, _sbss, _ebss;
 
@@ -46,8 +47,6 @@ void Reset_Handler(void)
 
 	systick_init();
 
-        nvic_init();
-
         main();
 
         while (1); 
@@ -55,8 +54,11 @@ void Reset_Handler(void)
 
 void IRQ15_Handler(void)
 {
-        /* Implementation pending */
+        ICU_EVLINK(0) &= ~(1U << 16);
+        NVIC_ICPR = 0x1U;
+
         g_irq15_stat++;
+        IOPORT_SET_PIN(IO_PORT_06, IO_PIN_10);
 }
 
 __attribute__((section(".vectors"), used))
