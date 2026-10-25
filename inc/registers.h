@@ -84,8 +84,48 @@
 
 #define CPU_HZ     		80000000UL
 
-#define IOPORT_BASE		0x4001F000UL
-#define IOPORT_PODR(n)		REG16((IOPORT_BASE + (0x0020 * n)) + 0x000)
-#define IOPORT_PDR(n)		REG16((IOPORT_BASE + (0x0020 * n)) + 0x002)
+#define IOPORT_BASE	        0x4001F000UL
+#define IOPORT_PODR(n)      REG16((IOPORT_BASE + (0x0020 * n)) + 0x000)
+#define IOPORT_PDR(n)       REG16((IOPORT_BASE + (0x0020 * n)) + 0x002)
+
+#define PORT_PFSEL_BASE     0x4001F800UL
+#define PMN_PFS(m, n)       REG16(PORT_PFSEL_BASE + 0x000U + (0x040 * m) + (0x004 * n))
+
+#define NVIC_ISER           REG32(0xE000E100UL)
+#define NVIC_ICER           REG32(0xE000E180UL)
+#define NVIC_ISPR           REG32(0xE000E200UL)
+#define NVIC_ICPR           REG32(0xE000E280UL)
+#define NVIC_IPR            REG8(0xE000E400UL)
+
+#define ICU_BASE            (0x40006000UL)
+/* IRQ Control register - n: 0-15 */
+#define IRQ_CR(n)           REG8(ICU_BASE + (0x1 * (n)))
+
+#define IRQ_CR_MD_OFF       (0U)
+#define IRQ_CR_MD_MSK       (3U)
+#define IRQ_EDGE_FALL       (0U)
+#define IRQ_EDGE_RISE       (1U)
+#define IRQ_EDGE_RANDF      (2U)
+#define IRQ_EDGE_LOW_LEV    (3U)
+
+/* ICU Event Link register - n : 0-63 */
+#define ICU_EVLINK(n)       REG32(ICU_BASE + 0x300 + (0x4 * n))
+
+#define ICU_IELS_OFF        (0U)
+#define ICU_IELS_MSK        (0xFFU)
+
+/* PMISC: Miscellaneous Port Control. Verify base against the RA4C1 manual */
+#define PWPR                REG8(0x4001F800UL + 0x503U)
+
+#define PWPR_PFSWE          (1U << 6)   /* PFS register write enable          */
+#define PWPR_B0WI           (1U << 7)   /* PFSWE bit write disable            */
+
+/* Unlock: B0WI must be cleared first, then PFSWE can be set */
+#define PFS_WRITE_ENABLE()  do { PWPR = 0x00U;       \
+                                  PWPR = PWPR_PFSWE; } while (0)
+
+/* Lock: clear PFSWE first, then set B0WI */
+#define PFS_WRITE_DISABLE() do { PWPR = 0x00U;       \
+                                  PWPR = PWPR_B0WI;  } while (0)
 
 #endif /* REGISTERS_H */

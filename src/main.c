@@ -1,8 +1,10 @@
 #include <stdint.h>
 #include "main.h"
 #include "ioport.h"
+#include "icu.h"
 
 extern volatile uint32_t g_tick_count;
+extern volatile uint8_t g_irq15_stat;
 
 static void mcu_sleep(uint32_t delay_ms)
 {
@@ -19,11 +21,20 @@ int main(void)
 {
 	IOPORT_SET_OUT(IO_PORT_06, IO_PIN_10);
 
+	PFS_WRITE_ENABLE();
+	PMN_PFS(5U, 13U) |= (1U << 14);
+	PFS_WRITE_DISABLE();
+
+	icu_event_link(0U, IRQ15);
+
 	while (1)
 	{
-		IOPORT_TOGGLE_PIN(IO_PORT_06, IO_PIN_10);
+		if (g_irq15_stat > 0U)
+		{
+			IOPORT_SET_PIN(IO_PORT_06, IO_PIN_10);
 
-		mcu_sleep(1000);
+			g_irq15_stat = 0;
+		}
 	}
 
         while(1);

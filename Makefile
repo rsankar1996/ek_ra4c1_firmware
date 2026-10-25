@@ -10,9 +10,11 @@ all: $(TARGET).elf $(TARGET).bin
 	mkdir -p build
 	mv $(TARGET).* build/
 
-CSOURCES = src/startup.c \
-	   src/main.c	\
-	   src/init.c
+CSOURCES = 	src/startup.c \
+			src/nvic.c	\
+	   		src/main.c	\
+	   		src/init.c	\
+	   		src/icu.c
 
 LINKER = linker.ld
 
